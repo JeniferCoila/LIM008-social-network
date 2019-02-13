@@ -14,9 +14,10 @@ const viewTemp = (routers) => {
   let router = routers.substr(2, routers.length - 2);
   const container = document.getElementById('container');
   const navPost = document.getElementById('navPost');
+  const container = document.getElementById('container');
   navPost.innerHTML = '';
   container.innerHTML = '';
-  
+
   switch (router) {
   case 'home':
     navPost.appendChild(viewTemplates.home()); 

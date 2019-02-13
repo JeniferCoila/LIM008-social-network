@@ -1,30 +1,28 @@
 import {signInUser, loginAuth, closeSignIn, signUpUser, updateProfile} from '../firebase/controller-auth-login.js';
 
-
-/* Funcion de inicio de sesion Firebase*/
 export const loginCall = (email, password, invalid) => {
   signInUser(email, password).catch((error) => {
     const errorCode = error.code;  
     const errorMessage = error.message;
     invalid.innerHTML = errorCode;
     invalid.innerHTML = errorMessage;
+    invalid.innerHTML = 'El email o la contraseña son inválidos.';
   });
 };
 
 // para observar los datos del usuario que inició sesión.
-export const loginCheckIn = () => {
-  loginAuth((user) => {
-    if (user) {
-      const user = firebase.auth().currentUser;
-      if (user !== null) {
-        window.location.hash = '#/home';
-        console.log('esta registrado');   
-      }
+export const loginCheckIn = (error) => {
+  loginAuth(() => {
+    const user = firebase.auth().currentUser;
+    const messageUserNoRegister = error;
+    if (user !== null) {
+      const emailUser = user.email;
+      window.location.hash = '#/home';
     } else {
-      console.log('No esta registrado todavia');
+      messageUserNoRegister.innerHTML = 'No esta registrado todavia';
     }
   });
-};
+};   
 
 /* Funcion de cerrar sesion de Firebase*/
 export const closeSessionCall = () => {
@@ -35,11 +33,10 @@ export const closeSessionCall = () => {
 export const registerAcccount = (email, password, name, lastName, nickName, country, errorText) => {
   signUpUser(email, password)
     .then(result => {
-      console.log('registerAccount antes de config');
       const configuration = {
         url: 'http://127.0.0.1:5500/src/'
       };
-      console.log('registerAccount antes de addData');
+      result.user.sendEmailVerification(configuracion);
       addData(email, password, name, lastName, nickName, country, errorText);
       updateProfile(name, lastName);
       firebase.auth().signOut();
@@ -49,7 +46,6 @@ export const registerAcccount = (email, password, name, lastName, nickName, coun
       const errorMessage = error.message;
       errorText.innerHTML = 'Error :' + errorMessage;
     });
-};
 
 
 export const addData = (email, password, name, lastName, nickName, country, errorText) => {

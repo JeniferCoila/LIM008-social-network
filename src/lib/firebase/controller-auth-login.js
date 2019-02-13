@@ -65,6 +65,17 @@ export const updateLikePost = (id, countLikes) => {
 
 export const isUserSignedIn = () => firebase.auth().currentUser.uid;
 
+export const updateProfile = (name, lastName) => {
+  let user = firebase.auth().currentUser;
+  user.updateProfile({
+    displayName: name + ' ' + lastName,
+  }).then(() => {
+    console.log('Se Actualizo de manera exitosa');
+  }).catch(error => {
+    console.log(error);
+  });
+};
+
 // funcion para editar post
 export const editPosts = (idPost, textNewNote) => firebase.firestore().collection('posts').doc(idPost).update({
   content: textNewNote,
