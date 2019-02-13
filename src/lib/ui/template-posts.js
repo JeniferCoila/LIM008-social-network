@@ -17,9 +17,10 @@ export const postFunction = (post) => {
       <span id= 'likes-number-${post.id}' class='like-word'>${post.likes}</span>
       <span id= 'like-text-${post.id}' class='like-word'>Like</span></div>
       <button class='btn-post btn-edit-delete' id='btn-edit-${post.id}'>Editar</button>
-      <button class='btn-post btn-edit-update' id='btn-update-${post.id}'>Enviar</button></div>
+      <button class='btn-post btn-edit-update' id='btn-update-${post.id}'>Enviar</button>
       <button class='btn-post btn-edit-delete' id='btn-save-${post.id}' hidden >Guardar</button>
-      <button class='btn-post btn-edit-delete' id='btn-deleted-${post.id}'>Eliminar</button></div>`;
+      <button class='btn-post btn-edit-delete' id='btn-deleted-${post.id}'>Eliminar</button></div>
+      </div>`;
   
   let postList = document.createElement('form');
   postList.setAttribute('id', `id-${post.id}`);
