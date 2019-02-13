@@ -13,7 +13,7 @@ global.firebase = firebasemock.MockFirebaseSdk(
 );
 
 // importamos la funcion que vamos a testear
-import { signInUser, loginAuth, closeSignIn, signUpUser } from '../src/lib/firebase/controller-firebase.js';
+import { signInUser, loginAuth, closeSignIn, signUpUser } from '../src/lib/firebase/controller-auth-login';
 
 describe('signInUser', () => {
   it('debería ser una función', () => {

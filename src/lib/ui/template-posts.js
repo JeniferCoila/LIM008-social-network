@@ -11,13 +11,12 @@ export const postFunction = (post) => {
       <span class = "user-display-time">${post.date}</span>
       ${post.privacy === 'publico' ? '<i class="post-public" aria-hidden="true"></i>' : ' <i class="post-private" aria-hidden="true"></i>'}</div>
       </h2>
-      <textarea class='content-edit' id='textarea-post-${post.id}' contenteditable='true'>${post.content}</textarea>
+      <textarea class='content-edit' id='textarea-post-${post.id}' disabled>${post.content}</textarea>
       </div>
       <div class='count-like'><a id='btn-like-${post.id}'><img src='img/corazon.png' alt='icono de like' class='img-like align'></a>
       <span id= 'likes-number-${post.id}' class='like-word'>${post.likes}</span>
       <span id= 'like-text-${post.id}' class='like-word'>Like</span></div>
       <button class='btn-post btn-edit-delete' id='btn-edit-${post.id}'>Editar</button>
-      <button class='btn-post btn-edit-update' id='btn-update-${post.id}'>Enviar</button>
       <button class='btn-post btn-edit-delete' id='btn-save-${post.id}' hidden >Guardar</button>
       <button class='btn-post btn-edit-delete' id='btn-deleted-${post.id}'>Eliminar</button></div>
       </div>`;
@@ -53,14 +52,6 @@ export const postFunction = (post) => {
     updateLikeCount(post.id, post.likes += 1);
   });
 
-  postList.querySelector(`#btn-edit-${post.id}`).addEventListener('click', () => {
-    const textareaPost = document.querySelector(`#textarea-post-${post.id}`);
-    textareaPost.disabled = false;
-    const btnEditNone = document.querySelector(`#btn-edit-${post.id}`);
-    btnEditNone.style.display = 'none';
-    const btnSaveBlock = document.querySelector(`#btn-save-${post.id}`);
-    btnSaveBlock.style.display = 'block';
-  });
 
   return postList;
 };

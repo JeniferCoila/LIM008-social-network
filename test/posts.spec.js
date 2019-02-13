@@ -14,23 +14,26 @@ const fixtureData = {
 };
 
 global.firebase = new MockFirebase(fixtureData, { isNaiveSnapshotListenerEnabled: true });
+import { addPost, deletePost, getPosts } from '../src/lib/firebase/controller-auth-login';
+
 
 describe('lista de posts', () => {
-  it('Debería porder agregar un post', (done) => {
-    return addPost('Feliz Cumpleaños')
-      .then(() => getPost(
+  it('Debería poder agregar un post', (done) => {
+    return addPost('Hola')
+      .then(() => getPosts(
         (data) => {
-          const result = data.find((note) => note.message === 'Feliz Cumpleaños');
-          expect(result.message).toBe('');
-          done('Feliz Cumpleaños');
+          const result = data.find((post) => post.message === 'Hola');
+          expect(result.message).toBe('Hola');
+          done();
         }
       ));
   });
+  
   it('Debería poder eliminar un post', (done) => {
     return deletePost('abc1d')
-      .then(() => getPost(
+      .then(() => getPosts(
         (data) => {
-          const result = data.find((note) => note.id === 'abc1d');
+          const result = data.find((post) => post.id === 'Hola');
           expect(result).toBe(undefined);
           done();
         }
