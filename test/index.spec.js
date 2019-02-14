@@ -11,39 +11,57 @@ global.firebase = firebasemock.MockFirebaseSdk(
   () => mockauth,
   () => mockfirestore
 );
+// Dom para testear logInCall
+const errorText = '<h3 id="error-text" class="message-error"></h3>';
 
 // importamos la funcion que vamos a testear
-import { signInUser, loginAuth, closeSignIn, signUpUser } from '../src/lib/firebase/controller-auth-login';
+import { signInUser, loginAuth, closeSignIn, signUpUser, updateProfile } from '../src/lib/firebase/controller-auth-login';
+import {addData, loginCall, registerAcccount} from '../src/lib/view-controller/view-controller-auth.js'; 
 
 describe('signInUser', () => {
-  it('debería ser una función', () => {
-    expect(typeof signInUser).toBe('function');
-  });
   it('Debería poder iniciar sesion', () => {
-    return signInUser('front@end.la', '123456')
+    return signInUser('gatitosbonitos@gmail.com', '123456')
       .then((user) => {
-        expect(user.email).toBe('front@end.la');
+        expect(user.email).toBe('gatitosbonitos@gmail.com');
       });
   });
 });
 
-describe('loginAuth', () => {
-  it('debería ser una función', () => {
-    expect(typeof loginAuth).toBe('function');
+describe('closeSignIn', () => {
+  it('Debería poder salir de sesion de la cuenta de la red social', () => {
+    return closeSignIn();
   });
-  it('Debería poder auntentificar el email y contraseña', () => {
-    return loginAuth(() => {
-      
+});
+
+describe('signUpUser', () => {
+  it('Debería poder registrar a un usuario', () => {
+    return signUpUser('gatitosbonitos@gmail.com', '234567');
+  });
+});
+
+describe('updateProfile', () => {
+  it('Debería poder actualizar el nombre del usuario', () => {
+    signInUser('gatitosbonitos@gmail.com', '123456').then(() => {
+      return updateProfile('Nataly', 'Jallo');
     });
   });
 });
 
-describe('closeSignIn', () => {
-  it('debería ser una función', () => {
-    expect(typeof closeSignIn).toBe('function');
+describe('addData', () => {
+  it('Debería poder añadir la data del usuario', () => {
+    return addData('gatitosbonitos@gmail.com', '123456', 'Nataly', 'Jallo', 'Naty', 'Peru', 'e4grdsvvde2434434');
   });
-  it('Debería poder salir de sesion de la cuenta de la red social', () => {
-    return closeSignIn();
+});
+
+describe('loginCall', () => {
+  it('Debería poder llamarme la función para loguearme', () => {
+    return loginCall('gatitosbonitos@gmail.com', 'abc123', errorText);
+  });
+});
+
+describe('registerAcccount', () => {
+  it('Debería poder llamarme la función para loguearme', () => {
+    return registerAcccount('gatitosbonitos@gmail.com', '123456', 'Nataly', 'Jallo', 'Naty', 'Peru');
   });
 });
 
@@ -52,15 +70,6 @@ describe('signUpUser', () => {
     expect(typeof signUpUser).toBe('function');
   });
   it('Debería poder registrar a un usuario', () => {
-    return signUpUser('margarita12@gmail.com', '234567');
+    return signUpUser('toxoloc@parcel4.net', '123456nat');
   });
 });
-
-// describe('D', () => {
-//   it('debería ser una función', () => {
-//     expect(typeof signUpUser).toBe('function');
-//   });
-//   it('Debería poder registrar a un usuario', () => {
-//     return signUpUser('front@end.la', '123456');
-//   });
-// });

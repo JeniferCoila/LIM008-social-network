@@ -1,4 +1,3 @@
-import {postDate} from '../view-controller/view-controller-auth.js';
 
 export const signInUser = (email, password) => firebase.auth().signInWithEmailAndPassword(email, password);
 
@@ -11,8 +10,7 @@ export const signUpUser = (email, password) => firebase.auth().createUserWithEma
 export const deletePost = (idPost) => firebase.firestore().collection('posts').doc(idPost).delete();
 
 /* Esta es mi funcion de agregar post a mi coleccion posts - JENI */
-export const addPost = (textNewPost, privacyUser, profileUser, nameUser, uidUser, likesUser) => firebase.firestore().collection('posts').add({
-  profileUid: profileUser,
+export const addPost = (textNewPost, privacyUser, nameUser, uidUser, likesUser) => firebase.firestore().collection('posts').add({
   content: textNewPost, 
   privacy: privacyUser,
   name: nameUser,
@@ -22,7 +20,7 @@ export const addPost = (textNewPost, privacyUser, profileUser, nameUser, uidUser
 });
 
 /* Funcion para obtener mis post de mi coleccion */
-export const getPosts = (callback) => {
+export const getPosts = (callback, uid) => {
   firebase.firestore().collection('posts').onSnapshot((querySnapshot) => {
     let data = [];
     querySnapshot.forEach(doc => {
@@ -44,17 +42,10 @@ export const updateProfile = (name, lastName) => {
   let user = firebase.auth().currentUser;
   user.updateProfile({
     displayName: name + ' ' + lastName,
-  }).then(() => {
-    console.log('Se Actualizo de manera exitosa');
-  }).catch(error => {
-    console.log(error);
   });
 };
 
 export const getUserName = () => firebase.auth().currentUser.displayName;
-
-export const getProfilePicUrl = () => firebase.auth().currentUser.photoURL;
-
 
 export const updateLikePost = (id, countLikes) => {
   let refLikes = firebase.firestore().collection('posts').doc(id);

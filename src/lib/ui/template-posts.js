@@ -2,7 +2,7 @@ import {deletePost, editPosts} from '../firebase/controller-auth-login.js';
 import {updateLikeCount} from '../view-controller/view-controller.js';
 
 /* Funcion con el maquetado de mis post*/
-export const postFunction = (post) => {
+export const postFunction = (post, uid) => {
   const tmp = `<div class='box-post large2'>
       <div class='box-post-message'>
       <img src='img/usuario-3.png' alt='icono de perfil' class='img-menu align-2'>
@@ -16,6 +16,20 @@ export const postFunction = (post) => {
       <div class='count-like'><a id='btn-like-${post.id}'><img src='img/corazon.png' alt='icono de like' class='img-like align'></a>
       <span id= 'likes-number-${post.id}' class='like-word'>${post.likes}</span>
       <span id= 'like-text-${post.id}' class='like-word'>Like</span></div>
+
+      <div id="btn-edit-${post.id}"> 
+          ${post.uid === uid ? '<button class="btn-post btn-edit-delete" >Editar</button>' : ''}  
+      </div>
+          
+          <div id="btn-edit-${objNote.id}"> 
+          ${objNote.uid === uid ? '<button class="material-icons"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>' : ''}
+          </div>
+          
+          <div class="btn-save-edit-post" id="btn-save-${objNote.id}"> 
+          ${objNote.uid === uid ? '<button class="material-icons" ><i class="fa fa-floppy-o" aria-hidden="true"></i></button>' : ''}
+          </div>
+
+
       <button class='btn-post btn-edit-delete' id='btn-edit-${post.id}'>Editar</button>
       <button class='btn-post btn-edit-delete' id='btn-save-${post.id}' hidden >Guardar</button>
       <button class='btn-post btn-edit-delete' id='btn-deleted-${post.id}'>Eliminar</button></div>

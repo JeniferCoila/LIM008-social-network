@@ -1,14 +1,38 @@
 
-import { ingresoFacebook, ingresoGoogle} from '../firebase/controller-auth-apis.js';
+import { facebookLogIn, googleLogIn} from '../firebase/controller-auth-apis.js';
 import {loginCall, loginCheckIn, registerAcccount, validateloginForm, validationPost} from './view-controller-auth.js';
-import {addPost, isUserSignedIn, getUserName, getProfilePicUrl, updateLikePost } from '../firebase/controller-auth-login.js';
+import {addPost, isUserSignedIn, getUserName, updateLikePost } from '../firebase/controller-auth-login.js';
+import {postFunction} from '../ui/template-posts.js';
 
 export const btnGoogle = () => {
-  ingresoGoogle();
+  googleLogIn().then((result) => {
+    const token = result.credential.accessToken;
+    const user = result.user;
+  }).catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.log('google funciona aqui');
+    const email = error.email;
+    const credential = error.credential;
+    if (errorCode === 'auth/account-exists-with-different-credential') {
+      console.log('Estas usando la misma cuenta');
+    }
+  });
   loginCheckIn();
 };
 export const btnFacebook = () => {
-  ingresoFacebook();
+  facebookLogIn().then((result) => {
+    const token = result.credential.accessToken;
+    const user = result.user;
+  }).catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    const email = error.email;
+    const credential = error.credential;
+    if (errorCode === 'auth/account-exists-with-different-credential') {
+      console.log('Estas usando la misma cuenta');
+    }
+  });
   loginCheckIn();
 };
 
@@ -18,10 +42,13 @@ export const btnSignIn = (elemt) => {
   console.log(emailLogIn); // Input email de inicio de sesión
   const passwordLogIn = elemt.querySelector('#input-password').value; // Input contraseña de inicio de sesión
   const errorText = elemt.querySelector('#error-text');
-  if (validateloginForm(emailLogIn, passwordLogIn, errorText) === true) {
-    loginCall(emailLogIn, passwordLogIn, errorText);
-    loginCheckIn();
-  };
+  const resultValidation = validateloginForm(emailLogIn, passwordLogIn);
+  if (resultValidation.condition === true) {
+    loginCall(emailLogIn, passwordLogIn);
+    loginCheckIn(errorText);
+  } else {
+    errorText.innerHTML = resultValidation.message;
+  }
 };
 
 export const btnRegister = (element) => {
@@ -50,8 +77,7 @@ export const postSubmit = (element) => {
       actionText: 'Undo'
     };
     const name = getUserName();
-    const image = getProfilePicUrl();
-    addPost(content.value, privacy.value, image, name, uidUser, countLike)
+    addPost(content.value, privacy.value, name, uidUser, countLike)
       .then(() => {
         content.value = '';
         data.message = 'Post agregado';
@@ -69,16 +95,15 @@ export const updateLikeCount = (post, like) => {
   return updateLikePost(post, like);
 };
 
-
 /* CONTAINER de mis posts(ul) */  
 
 export const postInSection = (posts, uid) => {
   const postListWall = posts.querySelector('#post-container');
   postListWall.innerHTML = '';
   posts.forEach((post) => {
-    if (post.privacy === 'privado' && post.uid === uid) {
+    if (post.privacy === 'Privado' && post.uid === uid) {
       postListWall.appendChild(postFunction(post, uid));
-    } else if (post.privacy === 'publico') {
+    } else if (post.privacy === 'Público') {
       postListWall.appendChild(postFunction(post, uid));
     }
   });

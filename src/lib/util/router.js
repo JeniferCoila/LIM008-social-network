@@ -1,5 +1,5 @@
 import { viewTemplates } from '../ui/templates.js';
-
+import {isUserSignedIn} from '../firebase/controller-auth-login.js';
 
 const changeTmp = (hash) => {
   if (hash === '#/' || hash === '' || hash === '#') {
@@ -16,10 +16,9 @@ const viewTemp = (routers) => {
   const navPost = document.getElementById('navPost');
   navPost.innerHTML = '';
   container.innerHTML = '';
-  
   switch (router) {
   case 'home':
-    navPost.appendChild(viewTemplates.home()); 
+    navPost.appendChild(viewTemplates.home(isUserSignedIn())); 
     break;
   case 'signIn':
     container.appendChild(viewTemplates.signIn());

@@ -1,6 +1,6 @@
 import {closeSessionCall } from '../view-controller/view-controller-auth.js';
 import {btnFacebook, btnGoogle, btnSignIn, btnRegister, postSubmit} from '../view-controller/view-controller.js';
-import { getPosts, isUserSignedIn} from '../firebase/controller-auth-login.js';
+import { getPosts} from '../firebase/controller-auth-login.js';
 import {postFunction} from '../ui/template-posts.js';
 
 // template de inicio de sesion, registro y pagina principal de la red social
@@ -82,7 +82,9 @@ export const viewTemplates = {
     return element2;
   },
   
-  home: () => {
+  home: (uid) => {
+    console.log(uid);
+    
     const tmpl = `<header class='header-page'>
                   <div><img class='img-logo  align top' src='img/logo.png' alt='logo-feminista'>
                   <input class='menu-bar' type='checkbox' id='menu-bar'>
@@ -91,8 +93,8 @@ export const viewTemplates = {
                     <ul class='menu-ul'>
                       <li class='li-menu'><a class='profile'><img class='img-logo-2 align top' src='img/usuario-3.png' alt='icono'><h2 class='text-4 margin'>Perfil</h2></a></li>
                       <li class='li-menu2'><a class='items'><img class='img-logo  align top' src='img/historia.png' alt='icono'><h2 class='text-3'>Historias</h2></a></li>
-                      <li class='li-menu2'><a class='items'><img class='img-logo  align top' src='img/historia.png' alt='icono'><h2 class='text-3'>Mis Historias</h2></a></li>
-                      <li class='li-menu2'><a class='items'><img class='img-logo  align top' src='img/calendario.png' alt='icono'><h2 class='text-3'>Eventos</h2></a></li>
+                      <li id = 'my-stories' class='li-menu2'><a class='items'><img class='img-logo  align top' src='img/historia.png' alt='icono'><h2 class='text-3'>Mis Historias</h2></a></li>
+                      <li id = 'all-stories' class='li-menu2'><a class='items'><img class='img-logo  align top' src='img/calendario.png' alt='icono'><h2 class='text-3'>Eventos</h2></a></li>
                       <li class='li-menu2'><a class='items'><img class='img-logo  align top' src='img/grupo.png' alt='icono'><h2 class='text-3'>Grupos</h2></a></li>
                       <li class='li-menu2'><a class='items'><img class='img-logo  align top' src='img/mundo.png' alt='icono'><h2 class='text-3'>Comunidades</h2></a></li>
                       <li class='li-menu2'><a class='items'><img class='img-logo  align top' src='img/ley.png' alt='icono'><h2 class='text-3'>Apoyo Legal</h2></a></li>
@@ -126,14 +128,12 @@ export const viewTemplates = {
     });
 
     const container = section.querySelector('#post-container');
-
-
     
     getPosts((posts) => {
       container.innerHTML = '';
       posts.forEach(post => {
         console.log(post);
-        container.appendChild(postFunction(post));
+        container.appendChild(postFunction(post,uid));
       });
     });
     
