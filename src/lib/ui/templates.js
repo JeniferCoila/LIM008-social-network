@@ -1,6 +1,6 @@
 import {closeSessionCall } from '../view-controller/view-controller-auth.js';
 import {btnFacebook, btnGoogle, btnSignIn, btnRegister, postSubmit} from '../view-controller/view-controller.js';
-import { getPosts} from '../firebase/controller-auth-login.js';
+import { getPosts, isUserSignedIn, getPrivPosts} from '../firebase/controller-auth-login.js';
 import {postFunction} from '../ui/template-posts.js';
 
 // template de inicio de sesion, registro y pagina principal de la red social
@@ -82,19 +82,18 @@ export const viewTemplates = {
     return element2;
   },
   
-  home: (uid) => {
-    console.log(uid);
-    
+  home: () => {
     const tmpl = `<header class='header-page'>
                   <div><img class='img-logo  align top' src='img/logo.png' alt='logo-feminista'>
                   <input class='menu-bar' type='checkbox' id='menu-bar'>
                   <label class='icon-menu' for='menu-bar'><img src='img/boton-menu.png' alt='icono de menu' class='img-menu  align top'></label>
                   <nav class='menu-nav'>
                     <ul class='menu-ul'>
-                      <li class='li-menu'><a class='profile'><img class='img-logo-2 align top' src='img/usuario-3.png' alt='icono'><h2 class='text-4 margin'>Perfil</h2></a></li>
-                      <li class='li-menu2'><a class='items'><img class='img-logo  align top' src='img/historia.png' alt='icono'><h2 class='text-3'>Historias</h2></a></li>
-                      <li id = 'my-stories' class='li-menu2'><a class='items'><img class='img-logo  align top' src='img/historia.png' alt='icono'><h2 class='text-3'>Mis Historias</h2></a></li>
-                      <li id = 'all-stories' class='li-menu2'><a class='items'><img class='img-logo  align top' src='img/calendario.png' alt='icono'><h2 class='text-3'>Eventos</h2></a></li>
+                      
+                    <li class='li-menu'><a class='profile'><img class='img-logo-2 align top' src='img/usuario-3.png' alt='icono'><h2 class='text-4 margin'>Perfil</h2></a></li>
+                      <li  class='li-menu2'><a class='items'><img class='img-logo  align top' src='img/historia.png' alt='icono'><h2 id= "public-stories" class='text-3'>Historias</h2></a></li>
+                      <li  class='li-menu2'><a class='items'><img class='img-logo  align top' src='img/historia.png' alt='icono'><h2 id= "my-stories" class='text-3'>Historias de mis amigos</h2></a></li>
+                      <li class='li-menu2'><a class='items'><img class='img-logo  align top' src='img/calendario.png' alt='icono'><h2 class='text-3'>Eventos</h2></a></li>
                       <li class='li-menu2'><a class='items'><img class='img-logo  align top' src='img/grupo.png' alt='icono'><h2 class='text-3'>Grupos</h2></a></li>
                       <li class='li-menu2'><a class='items'><img class='img-logo  align top' src='img/mundo.png' alt='icono'><h2 class='text-3'>Comunidades</h2></a></li>
                       <li class='li-menu2'><a class='items'><img class='img-logo  align top' src='img/ley.png' alt='icono'><h2 class='text-3'>Apoyo Legal</h2></a></li>
@@ -126,18 +125,36 @@ export const viewTemplates = {
     btnPost.addEventListener('click', () => {
       postSubmit(section);
     });
+    const postContainer = section.querySelector('#post-container');    
+    const publicPostBtn = section.querySelector('#public-stories');
+    const privPostBtn = section.querySelector('#my-stories');
+    const btnCloseSession = section.querySelector('#log-out-btn');
 
-    const container = section.querySelector('#post-container');
-    
-    getPosts((posts) => {
-      container.innerHTML = '';
+    getPosts((posts) => {  
+      postContainer.innerHTML = '';
       posts.forEach(post => {
-        console.log(post);
-        container.appendChild(postFunction(post,uid));
+        const uid = isUserSignedIn();
+        postContainer.appendChild(postFunction(post, uid));
+      });
+    });
+
+      
+    publicPostBtn.addEventListener('click', () => {
+      document.location.reload();      
+      window.location.hash = '#/home';
+    });
+
+
+    privPostBtn.addEventListener('click', () => {
+      getPrivPosts((posts) => {  
+        postContainer.innerHTML = '';
+        posts.forEach(post => {
+          const uid = isUserSignedIn();
+          postContainer.appendChild(postFunction(post, uid));
+        });
       });
     });
     
-    const btnCloseSession = section.querySelector('#log-out-btn');
     btnCloseSession.addEventListener('click', () => {
       closeSessionCall();
       window.location.hash = '#/signIn';
@@ -146,3 +163,5 @@ export const viewTemplates = {
     return section;
   },
 };
+
+

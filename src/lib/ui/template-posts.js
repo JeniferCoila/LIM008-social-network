@@ -18,21 +18,17 @@ export const postFunction = (post, uid) => {
       <span id= 'like-text-${post.id}' class='like-word'>Like</span></div>
 
       <div id="btn-edit-${post.id}"> 
-          ${post.uid === uid ? '<button class="btn-post btn-edit-delete" >Editar</button>' : ''}  
+      ${post.uid === uid ? '<button class="btn-post btn-edit-delete" >Editar</button>' : ''}  
       </div>
-          
-          <div id="btn-edit-${objNote.id}"> 
-          ${objNote.uid === uid ? '<button class="material-icons"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>' : ''}
-          </div>
-          
-          <div class="btn-save-edit-post" id="btn-save-${objNote.id}"> 
-          ${objNote.uid === uid ? '<button class="material-icons" ><i class="fa fa-floppy-o" aria-hidden="true"></i></button>' : ''}
-          </div>
-
-
-      <button class='btn-post btn-edit-delete' id='btn-edit-${post.id}'>Editar</button>
-      <button class='btn-post btn-edit-delete' id='btn-save-${post.id}' hidden >Guardar</button>
-      <button class='btn-post btn-edit-delete' id='btn-deleted-${post.id}'>Eliminar</button></div>
+      
+      <div id="btn-save-${post.id}"> 
+      ${post.uid === uid ? '<button class="btn-post btn-edit-delete"  hidden >Guardar</button>' : ''}  
+      </div>
+      
+      <div id="btn-deleted-${post.id}"> 
+      ${post.uid === uid ? '<button class="btn-post btn-edit-delete" >Eliminar</button>' : ''}  
+      </div> 
+      </div>
       </div>`;
   
   let postList = document.createElement('form');
@@ -62,10 +58,14 @@ export const postFunction = (post, uid) => {
   const btnLikePost = postList.querySelector(`#btn-like-${post.id}`);
   btnLikePost.addEventListener('click', () => {
     document.getElementById(`likes-number-${post.id}`).removeAttribute('hidden');
-    document.getElementById(`like-text-${post.id}`).setAttribute('hidden', 'true');
+    document.getElementById(`like-text-${post.id}`).setAttribute('hidden', 'true');    
     updateLikeCount(post.id, post.likes += 1);
   });
 
 
   return postList;
 };
+
+
+/* 
+ */

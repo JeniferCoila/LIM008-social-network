@@ -12,13 +12,25 @@ const fixtureData = {
           privacy: 'Público',
           uid: '79wGxqkdsAbUhMcIRd68W0SPsui2'
         },
+        abc2d: {
+          content: 'Hola Naty',
+          date: '14 de febrero de 2019, 15:30:36 UTC-4',
+          name: 'Nataly Jallo',
+          likes: 0,
+          privacy: 'Privado',
+          uid: '4t90nsnskfmmslmfkdngklsm446d'
+        },
       }
     }
   }
 };
 
 global.firebase = new MockFirebase(fixtureData, { isNaiveSnapshotListenerEnabled: true });
-import { addPost, deletePost, getPosts, updateLikePost, editPosts} from '../src/lib/firebase/controller-auth-login';
+import { addPost, deletePost, getPosts, getPrivPosts, updateLikePost, editPosts} from '../src/lib/firebase/controller-auth-login';
+import { validationPost } from '../src/lib/view-controller/view-controller-auth.js';
+
+const outPut5 = {condition: false, message: 'No puedes publicar algo vacio'};
+const outPut6 = {condition: true};
 
 describe('lista de posts', () => {
   it('Debería poder agregar un post', (done) => {
@@ -30,46 +42,67 @@ describe('lista de posts', () => {
       }
       ));
   });
-  
-  it('Debería poder eliminar un post', (done) => {
-    return deletePost('abc1d')
-      .then(() => getPosts(
-        (data) => {
-          const result = data.find((post) => post.id === 'Hola');
-          expect(result).toBe(undefined);
-          done();
-        }
-      ));
-  });
 
-  it('Debería poder obtener mis posts', () => {
-    return getPosts(fixtureData);
-  });
-
-  it('Debería poder agregarme likes', () => {
-    return updateLikePost('abc1d', 1)
-      .then(() => getPosts(
-        (data) => {
-          const result = data.find((post) => post.likes === 3);
-          expect(result).toBe(1);
-        }
+  it('Debería poder editar post', (done) => {
+    return editPosts('abc2d', 'Feliz Cumpleaños')
+      .then(() => getPosts((data) => {
+        const result = data.find((post) => post.content === 'Feliz Cumpleaños');
+        expect(result.content).toBe('Feliz Cumpleaños');
+        done();
+      }
       ));
   });
 });
 
-  it('debería de poder editar una nota', (done) => {
-    editPosts('abc1d', 'Data a cambiar').then(() => {
-      const callback = (posts) => {
-        const resultEdit = posts.find((post) => {
-          return post.id === 'abc1d';
-        });
-        expect(resultEdit.content).toBe('Data a cambiar');
-        
+describe('validationPost', () => {
+  it('Debería ser una función', () => {
+    expect(typeof validationPost).toBe('function');
+  });
+  it('Deberia validar que el post no sea vacio', () => {
+    expect(validationPost('')).toEqual(outPut5);
+  });
+  it('Deberia validar que el post no sea vacio', () => {
+    expect(validationPost('Hola Jenny')).toEqual(outPut6);
+  });
+});
+
+describe('deletePost', () => {
+  it('Debería poder eliminar un post', (done) => {
+    return deletePost('abc1d')
+      .then(() => getPosts(
+        (data) => {
+          const result = data.find((posts) => posts.id === 'abc1d');
+          expect(result).toBe(undefined);
+          done();
+        }));
+  });    
+});
+
+describe('lista de posts', () => {
+  it('Debería poder actualizar los likes del post', (done) => {
+    updateLikePost('abc2d', 1).then(() => getPosts(
+      (data) => {
+        const result = data.find((posts) => posts.likes === 1);
+        expect(result.likes).toBe(1);
         done();
-      };
-        // función de callback recibe la data
-      getPosts(callback);
-    });
+      }));
+  });
+});
+
+describe('obtener posts', () => {
+  it('Debería poder traer la colección de posts', (done) => {
+    const callback = (data) => {
+      expect(data[0].name).toBe('Nataly Jallo');
+      done();
+    };
+    getPosts(callback);
   });
 
-
+  it('Debería poder traer la colección de posts', (done) => {
+    const callback = (data) => {
+      expect(data[0].name).toBe('Nataly Jallo');
+      done();
+    };
+    getPrivPosts(callback);
+  });
+});

@@ -11,12 +11,16 @@ global.firebase = firebasemock.MockFirebaseSdk(
   () => mockauth,
   () => mockfirestore
 );
-// Dom para testear logInCall
-const errorText = '<h3 id="error-text" class="message-error"></h3>';
 
 // importamos la funcion que vamos a testear
-import { signInUser, loginAuth, closeSignIn, signUpUser, updateProfile } from '../src/lib/firebase/controller-auth-login';
-import {addData, loginCall, registerAcccount} from '../src/lib/view-controller/view-controller-auth.js'; 
+import { getUserName, signInUser, closeSignIn, signUpUser, updateProfile, isUserSignedIn } from '../src/lib/firebase/controller-auth-login';
+import { closeSessionCall, addData, loginCall, registerAcccount, validateloginForm, loginCheckIn} from '../src/lib/view-controller/view-controller-auth.js'; 
+
+// DOM para poder leer el error de mensaje
+const outPut = {condition: true};
+const outPut2 = {condition: false, message: 'Contraseña mayor a 6 caracteres'};
+const outPut3 = {condition: false, message: 'Ingrese su email correcto'};
+const outPut4 = {condition: false, message: 'Ingrese un email y un password'};
 
 describe('signInUser', () => {
   it('Debería poder iniciar sesion', () => {
@@ -28,8 +32,22 @@ describe('signInUser', () => {
 });
 
 describe('closeSignIn', () => {
+  it('debería ser una función', () => {
+    expect(typeof closeSignIn).toBe('function');
+  });
   it('Debería poder salir de sesion de la cuenta de la red social', () => {
     return closeSignIn();
+  });
+});
+
+describe('isUserSignedIn', () => {
+  it('debería ser una función', () => {
+    expect(typeof isUserSignedIn).toBe('function');
+  });
+  it('Debería poder autenticar el email para ingresar a la pagina al iniciar sesion', () => {
+    signInUser('gatitosbonitos@gmail.com', '123456').then(() => {
+      return isUserSignedIn('P37Kz7aGSiXpm6QCkrfsYvjG5r72');
+    });
   });
 });
 
@@ -47,6 +65,14 @@ describe('updateProfile', () => {
   });
 });
 
+describe('getUserName', () => {
+  it('Debería poder obtener el nombre', () => {
+    getUserName((user) => {
+      expect(user.displayName).toBe('Nataly Jallo');
+    });
+  });
+});
+
 describe('addData', () => {
   it('Debería poder añadir la data del usuario', () => {
     return addData('gatitosbonitos@gmail.com', '123456', 'Nataly', 'Jallo', 'Naty', 'Peru', 'e4grdsvvde2434434');
@@ -55,12 +81,14 @@ describe('addData', () => {
 
 describe('loginCall', () => {
   it('Debería poder llamarme la función para loguearme', () => {
-    return loginCall('gatitosbonitos@gmail.com', 'abc123', errorText);
+    signInUser('gatitosbonitos@gmail.com', 'abc123').then(() => {
+      return loginCall('gatitosbonitos@gmail.com', 'abc123');
+    });
   });
 });
 
 describe('registerAcccount', () => {
-  it('Debería poder llamarme la función para loguearme', () => {
+  it('Debería poder llamarme la función para registrarte', () => {
     return registerAcccount('gatitosbonitos@gmail.com', '123456', 'Nataly', 'Jallo', 'Naty', 'Peru');
   });
 });
@@ -73,3 +101,42 @@ describe('signUpUser', () => {
     return signUpUser('toxoloc@parcel4.net', '123456nat');
   });
 });
+
+describe('validateloginForm', () => {
+  it('Debería ser una función', () => {
+    expect(typeof validateloginForm).toBe('function');
+  });
+  it('Deberia validar que el email y password no sea vacio', () => {
+    expect(validateloginForm('margarita12@gmail.com', '234567')).toEqual(outPut);
+  });
+  it('Deberia validar que el password no sea menor de 6 caracteres', () => {
+    expect(validateloginForm('margarita12@gmail.com', '12')).toEqual(outPut2);
+  });
+  it('Deberia validar que el email sea correcto', () => {
+    expect(validateloginForm('natita', '1234567')).toEqual(outPut3);
+  });
+  it('Deberia validar que el email y password sea vacio', () => {
+    expect(validateloginForm('', '')).toEqual(outPut4);
+  });
+});
+
+
+describe('loginCheckIn', () => {
+  it('Debería poder observar si un usuario está logueado o no', () => {
+    const callback = (result) => {
+      expect(result).toBe(true);
+      done();
+    };  
+    loginCheckIn(callback);
+  });
+});
+
+describe('closeSessionCall', () => {
+  it('Debería poder cerrar sesión', () => {
+    signInUser('gatitosbonitos@gmail.com', '123456').then(() => {
+      return closeSessionCall();
+    });
+  });
+});
+
+

@@ -18,7 +18,7 @@ const viewTemp = (routers) => {
   container.innerHTML = '';
   switch (router) {
   case 'home':
-    navPost.appendChild(viewTemplates.home(isUserSignedIn())); 
+    navPost.appendChild(viewTemplates.home()); 
     break;
   case 'signIn':
     container.appendChild(viewTemplates.signIn());

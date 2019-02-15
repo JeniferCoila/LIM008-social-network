@@ -1,26 +1,28 @@
 import {signInUser, loginAuth, closeSignIn, signUpUser, updateProfile} from '../firebase/controller-auth-login.js';
 
 /* Funcion de inicio de sesion Firebase*/
-export const loginCall = (email, password, invalid) => {
-  signInUser(email, password).catch((error) => {
-    const errorCode = error.code;  
-    const errorMessage = error.message;
-    invalid.innerHTML = errorCode;
-    invalid.innerHTML = errorMessage;
-  });
+export const loginCall = (email, password) => {
+  if (signInUser(email, password)) {
+    return {
+      condition: true,
+    };
+  } else {
+    return {
+      condition: false,
+      message: 'El email y password sin invalidos'
+    };
+  }
 };
 
 // para observar los datos del usuario que inició sesión.
-export const loginCheckIn = () => {
-  loginAuth((user) => {
-    if (user) {
-      const user = firebase.auth().currentUser;
-      if (user !== null) {
-        window.location.hash = '#/home';
-        console.log('esta registrado');   
-      }
+export const loginCheckIn = (callback) => {
+  loginAuth(() => {
+    const user = firebase.auth().currentUser;
+    if (user !== null) {
+      const emailUser = user.email;
+      return callback(true);
     } else {
-      console.log('No esta registrado todavia');
+      return callback(false);
     }
   });
 };
@@ -30,6 +32,7 @@ export const closeSessionCall = () => {
   closeSignIn().then(() => {
   }).catch((error) => error);
 };
+
 /* Funcion de registro de Firebase*/
 export const registerAcccount = (email, password, name, lastName, nickName, country) => {  
   signUpUser(email, password)
@@ -59,7 +62,7 @@ export const addData = (email, password, name, lastName, nickName, country, uidN
 };
 
 // Funcion de validar si el correo y contraseña se han ingresado bien al iniciar sesion
-export const validateloginForm = (email, password, error) => {
+export const validateloginForm = (email, password) => {
   const regEx = /\S+@\S+\.\S+/;
   if (password !== '' & email !== '') {
     if (regEx.test(email)) {
@@ -85,6 +88,7 @@ export const validateloginForm = (email, password, error) => {
     };
   };
 };
+
 // Funcion para validar de que no se publique un post vacio
 export const validationPost = (post) => {
   let postValue = post.trim();
@@ -97,4 +101,3 @@ export const validationPost = (post) => {
     return {condition: true};
   }
 };
-
