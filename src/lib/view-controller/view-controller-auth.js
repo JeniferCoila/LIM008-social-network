@@ -1,10 +1,10 @@
-import {signInUser, loginAuth, closeSignIn, signUpUser, updateProfile} from '../firebase/controller-auth-login.js';
+import {signInUser, loginAuth, closeSignIn, signUpUser, updateProfile, deletePost} from '../firebase/controller-auth-login.js';
 
 /* Funcion de inicio de sesion Firebase*/
 export const loginCall = (email, password) => {
   if (signInUser(email, password)) {
     return {
-      condition: true,
+      condition: true
     };
   } else {
     return {
@@ -38,7 +38,7 @@ export const registerAcccount = (email, password, name, lastName, nickName, coun
   signUpUser(email, password)
     .then(result => {
       const configuration = {
-        url: 'http://127.0.0.1:5500/src/'
+        url: 'https://micaelasuarezcortez.github.io/LIM008-social-network/src/'
       };
       let uidNumber = firebase.auth().currentUser.uid;
       addData(email, password, name, lastName, nickName, country, uidNumber);
@@ -62,7 +62,7 @@ export const addData = (email, password, name, lastName, nickName, country, uidN
 };
 
 // Funcion de validar si el correo y contraseña se han ingresado bien al iniciar sesion
-export const validateloginForm = (email, password) => {
+export const validateloginForm = (email, password, error) => {
   const regEx = /\S+@\S+\.\S+/;
   if (password !== '' & email !== '') {
     if (regEx.test(email)) {
@@ -100,4 +100,18 @@ export const validationPost = (post) => {
   } else {
     return {condition: true};
   }
+};
+
+export const deleteConfirmation = (post) => {
+  const templ = `<div class='modal'>
+  <div class='modal-confirm'><h2 class='message-confirm'>Estas seguro de quieres eliminar esta publicación</h2>
+  </div>
+  <button type='button' id='btn-confirm' class='btn-edit'>Aceptar</button></div>`;
+  const containerModal = document.getElementById('container-modal');
+  containerModal.innerHTML = templ;
+  
+  const btnConfirmDelete = containerModal.querySelector('#btn-confirm');
+  btnConfirmDelete.addEventListener('click', () => {
+    deletePost(post);
+  });
 };
