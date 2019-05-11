@@ -200,6 +200,7 @@ h2{
 .menu-bar:checked ~ .menu-nav {
  transform: translateX(0%);
 }
+
 .menu-nav {
  position: absolute;
  top: 50px;

@@ -6,7 +6,7 @@ export const postFunction = (post, uid) => {
       <div class='box-post-message'>
       <img src="img/usuario-3.png" alt='icono de perfil' class='img-menu align-2'>
       <h2 class='text-5'>${post.name} dice
-      ${post.privacy === 'publico' ? '<img src="img/mundo2.png" class="post-public" aria-hidden="true" >' : ' <img src="img/privado2.png" class="post-private" aria-hidden="true" >'}</h2>
+      ${post.privacy === 'Público' ? '<img src="img/mundo2.png" class="post-public" aria-hidden="true" >' : ' <img src="img/privado2.png" class="post-private" aria-hidden="true" >'}</h2>
       <textarea class='content-edit' id='textarea-post-${post.id}' disabled >${post.content}</textarea>
       </div>
       <div class='count-like'><a id='btn-like-${post.id}' class='like'><img src='img/corazon.png' alt='icono de like' class='img-like align'></a>

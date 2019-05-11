@@ -38,10 +38,11 @@ export const getPosts = (callback) => {
 };
 
 /* Funcion para obtener los post privados de mi coleccion */
-export const getPrivPosts = (callback) => {
+export const getPrivPosts = (callback, privacy) => {
+  console.log(callback);
   firebase.firestore().collection('posts')
     .orderBy('date', 'desc')
-    .where('privacy', '==', 'Privado').onSnapshot((querySnapshot) => {
+    .where('privacy', '==', privacy).onSnapshot((querySnapshot) => {
       let data = [];
       querySnapshot.forEach(doc => {
         data.push({ 
