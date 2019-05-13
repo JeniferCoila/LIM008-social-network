@@ -6,27 +6,34 @@ import {postFunction} from '../ui/template-posts.js';
 // template de inicio de sesion, registro y pagina principal de la red social
 export const viewTemplates = {
   signIn: () => { 
-    const tmpl = `<div id='login-form' class='form-network'>
-                <div class='login-form space'>
-                <img src='img/logo2.png' class='img-login'>
-                <h1 class='text-logo style-logo'>JoinClude</h1>
-                <h3 class='style-login top'>LOGIN</h3>
-                <div class='field'>
-                <div class='login-user'>
-                <label for='input-email'><img src='img/usuario2.png' class='img-user login-user'></label>
-                <input type='email' id='input-email' class='input-email' placeholder='email' required></input>
-                <span id='error-email'></span>
-                <label for='input-password'><img src='img/bloquear-1.png' class='img-user login-user'></label>
-                <input type='password' id='input-password'class='input-email' placeholder='contraseña' minlength='6' required></input>
-                <span id='error-password'></span>
-                </div>
-                <h3 id='error-text' class='message-error'></h3>
-                <div class='btn-center'><button type='button' id='log-in-btn' class='btn-color singIn'>Ingresar</button></div>
-                <h4 class='text-register'>O ingresa con :</h4>
-                <button type='button' id='btn-facebook' class='btn-social-net'></button>
-                <button type='button' id='btn-google' class='btn-social-net'></button>
-                <h4 class='text-register'>Si no estas registrado,<br><span id='sign-up-btn' class='style-rgtr'>unete.</span></h4>
-                </div></div>`;
+    const tmpl = `
+  <div id='login-form' class='form-network login-form space  d-flex flex-column align-items-center'>
+    <div class='d-flex flex-row align-items-center'>
+      <img src='img/logo2.png' class='img-login'>
+      <h1 class='text-logo style-logo'>JoinClude</h1>
+    </div>
+      <h3 class='style-login top'>LOGIN</h3>
+      <div class='field'>
+        <div class='d-flex flex-column align-items-center'>
+          <label for='input-email'>
+          </label>
+          <input type='email' id='input-email' class='input-sign email' placeholder='email' required></input>
+          <span id='error-email'></span>
+          <label for='input-password'></label>
+          <input type='password' id='input-password' class='input-sign password' placeholder='contraseña' minlength='6'
+            required></input>
+          <span id='error-password'></span>
+        </div>
+        <h3 id='error-text' class='message-error'></h3>
+        <div class='btn-center'>
+        <button type='button' id='log-in-btn' class='btn-color singIn'>Ingresar</button></div>
+        <h4 class='text-register'>O ingresa con :</h4>
+        <div class="d-flex flex-row justify-content-center align-items-center">
+        <button type='button' id='btn-facebook' class='btn-social-net'></button>
+        <button type='button' id='btn-google' class='btn-social-net'></button>
+        </div>
+        <h4 class='text-register'>Si no estas registrado,<br><span id='sign-up-btn' class='style-rgtr'>unete.</span></h4>
+    </div>`;
     const element = document.createElement('form');
     element.innerHTML = tmpl;
 
@@ -68,7 +75,9 @@ export const viewTemplates = {
                 <input type='password' id='enter-psw' class='enter-data' placeholder='Contraseña' required minlength='8'> 
                 <i class='label-form'><img src='img/keys.png' class='img-icon login-user'></i>
                 <input type='password' id='re-enter-psw' class='enter-data' placeholder='Vuelve a ingresar tu contraseña' required minlength='8'> <span id='verif-pass'></span>
-                <div class='btn-center'><button type='button' id='send-data-btn' class='btn-color singIn top'> Registrarme</button></div>
+                <div class='btn-center d-flex justify-content-around'><button type='button' id='send-data-btn' class='btn-color singIn top'> Registrarme</button>
+                <button type='button' id='back-btn' class='btn-color singIn top'> Inicio de sesión</button></div>
+                </div>
                 <p id='error-text-sign-up' class='error-text-sign-up'></p>
                 </div>`;
     const element2 = document.createElement('form');
@@ -80,6 +89,13 @@ export const viewTemplates = {
       btnRegister(element2);
       window.location.hash = '#/signIn';
     });
+    const btnBackSignIn = element2.querySelector('#back-btn');
+
+    btnBackSignIn.addEventListener('click', () => {
+      window.location.hash = '#/signIn';
+    });
+
+    
     return element2;
   },
   

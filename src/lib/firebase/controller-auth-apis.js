@@ -8,5 +8,5 @@ export const facebookLogin = () => {
 /* Funcion inicio de sesión con Google */
 export const googleLogin = () => {
   const provider = new firebase.auth.GoogleAuthProvider();
-  firebase.auth().signInWithPopup(provider);
+  return firebase.auth().signInWithPopup(provider);
 };

@@ -6,18 +6,25 @@ export const btnGoogle = () => {
   googleLogin().then((result) => {
     const token = result.credential.accessToken;
     const user = result.user;
+    loginCheckIn((result) => {
+      if (result) {
+        window.location.hash = '#/home';
+      } else {
+        alert('No se pudo completar el inicio de sesión, intente de nuevo');
+      }
+    }); 
   }).catch((error) => {
     const errorCode = error.code;
     const errorMessage = error.message;
-    console.log('google funciona aqui');
     const email = error.email;
     const credential = error.credential;
+    alert(errorMessage);
     if (errorCode === 'auth/account-exists-with-different-credential') {
-      console.log('Estas usando la misma cuenta');
+      alert('Estas usando la misma cuenta');
     }
   });
-  loginCheckIn();
 };
+
 export const btnFacebook = () => {
   facebookLogin().then((result) => {
     const token = result.credential.accessToken;
@@ -31,7 +38,6 @@ export const btnFacebook = () => {
       console.log('Estas usando la misma cuenta');
     }
   });
-  loginCheckIn();
 };
 
 /* Inicio de sesión por email y contraseña y registro*/

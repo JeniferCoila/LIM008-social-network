@@ -9,10 +9,14 @@
 .container {
 top: 0px;
 bottom: 0px;
-background-image: url(img/fondo.jpg); 
+background: url(img/fondo.jpg) no-repeat center center fixed; 
 background-size: cover;
-background-attachment: fixed;
 padding-bottom: 12px;
+top: 0; 
+  left: 0; 
+  bottom: 0;
+	  min-width: 100%;
+  min-height: 100%;
 }
 body {  
  font-family: 'Open Sans', sans-serif; 
@@ -52,31 +56,41 @@ h2{
  color: #fff;
  width: 100px;
  float: right;
+ font-size: 40px;
 }
 .style-logo {
  margin-right: 100px;
  margin-top: 110px;
- font-size: 20px;
 }
 .top {
  margin-top: 10px;
 }
-.login-user {
-  margin-left: 35px;
-}
+
 .img-user {
  width: 20px;
  height: 20px;
 }
-.input-email {
- padding: 5px 5px 5px 17px;
- width: 220px;
+.input-sign{
+  padding: 5px 5px 5px 30px; 
+  width: 70%;
  margin-bottom: 15px;
- border-radius: 10px;
- background-color: #fff;
- color: #000;
- margin-right: 15px;
- border: 1px solid #E9ACF6;
+  border-radius: 10px;
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #E9ACF6;
+  background-repeat: no-repeat;
+  background-size: 20px 20px;
+  background-position: left center;
+}
+
+.email {
+  background-image: url('img/usuario2.png');
+
+}
+
+.password {
+  background-image: url('img/bloquear-1.png');
+
 }
 .message-error {
  width: 170px;
@@ -88,6 +102,7 @@ h2{
  font-family: 'Montserrat', sans-serif;
 }
 .btn-center {
+  height: 10px;
  width: 100%;
  margin-bottom: 10px;
  float: none;
@@ -108,7 +123,7 @@ h2{
 .text-register {
  text-align: center;
  font-weight: lighter;
- margin-bottom: 15px;
+ margin: 0px 15px;
 }
 .btn-social-net{
  cursor: pointer;
@@ -197,6 +212,7 @@ h2{
 .menu-bar {
  display: none;
 }
+
 .menu-bar:checked ~ .menu-nav {
  transform: translateX(0%);
 }
